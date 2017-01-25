@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.googlecode.the-fascinator.plugins</groupId>
+	<artifactId>plugin-storage-blobstore</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>Fascinator - Plugin - Storage - Blobstore</name>
+	<parent>
+		<artifactId>organisation</artifactId>
+		<groupId>com.googlecode.the-fascinator</groupId>
+		<version>1.0.3</version>
+	</parent>
+	<properties>
+		<fascinator.version>1.4</fascinator.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.googlecode.the-fascinator</groupId>
+			<artifactId>fascinator-plugin-api</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.the-fascinator</groupId>
+			<artifactId>fascinator-common</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.the-fascinator</groupId>
+			<artifactId>fascinator-core</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jclouds</groupId>
+			<artifactId>jclouds-all</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jclouds.api</groupId>
+			<artifactId>filesystem</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jclouds.api</groupId>
+			<artifactId>openstack-swift</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<scm>
+		<url>https://github.com/the-fascinator-contrib/plugin-storage-blobstore</url>
+		<developerConnection>scm:git:https://github.com/the-fascinator-contrib/plugin-storage-blobstore.git</developerConnection>
+	</scm>
+</project>

@@ -1,0 +1,11 @@
+{
+    "storage": {
+        "type": "blobstore",
+        "blobstore": {
+          "provider": "filesystem",
+          "containerName": "blobstoretest",
+          "fileSystemLocation": "blobstore",
+          "supportsUserMetadata": "false"
+        }
+    }
+}
