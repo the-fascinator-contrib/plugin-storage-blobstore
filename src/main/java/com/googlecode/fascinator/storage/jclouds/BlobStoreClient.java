@@ -123,7 +123,7 @@ public class BlobStoreClient {
 	 * @throws StorageException
 	 *             if any errors occur
 	 */
-	private static void init() throws StorageException {
+	private static void init() throws StorageException {	
 		// Don't instantiate twice
 		if (blobStore != null) {
 			return;
@@ -185,7 +185,7 @@ public class BlobStoreClient {
 			contextBuilder.overrides(properties);
 		} else if ("gridfs".equals(provider)) {
 			Properties properties = new Properties();
-			properties.setProperty(Constants.PROPERTY_ENDPOINT, "mongodb://my_mongo_server:27017/?maxPoolSize=50");
+			properties.setProperty(Constants.PROPERTY_ENDPOINT, gridFsConnectionString);
 			contextBuilder.overrides(properties);
 
 		}
