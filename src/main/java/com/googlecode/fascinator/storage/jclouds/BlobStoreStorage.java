@@ -124,210 +124,217 @@ import com.googlecode.fascinator.common.JsonSimpleConfig;
  */
 public class BlobStoreStorage implements Storage {
 
-    /** Logger */
-    private Logger log = LoggerFactory.getLogger(BlobStoreStorage.class);
+	/** Logger */
+	private Logger log = LoggerFactory.getLogger(BlobStoreStorage.class);
 
-    /** System Config */
-    private JsonSimpleConfig systemConfig;
+	/** System Config */
+	private JsonSimpleConfig systemConfig;
 
-    private static String METADATA_PAYLOAD = "TF-OBJ-META";
+	private static String METADATA_PAYLOAD = "TF-OBJ-META";
 
-    /**
-     * Return the ID of this plugin.
-     *
-     * @return String the plugin's ID.
-     */
-    @Override
-    public String getId() {
-        return "blobstore";
-    }
+	/**
+	 * Return the ID of this plugin.
+	 *
+	 * @return String the plugin's ID.
+	 */
+	@Override
+	public String getId() {
+		return "blobstore";
+	}
 
-    /**
-     * Return the name of this plugin.
-     *
-     * @return String the plugin's name.
-     */
-    @Override
-    public String getName() {
-        return "Blobstore Storage Plugin";
-    }
+	/**
+	 * Return the name of this plugin.
+	 *
+	 * @return String the plugin's name.
+	 */
+	@Override
+	public String getName() {
+		return "Blobstore Storage Plugin";
+	}
 
-    /**
-     * Public init method for File based configuration.
-     *
-     * @param jsonFile The File containing JSON configuration
-     * @throws StorageException if any errors occur
-     */
-    @Override
-    public void init(File jsonFile) throws StorageException {
-        try {
-            systemConfig = new JsonSimpleConfig(jsonFile);
-            BlobStoreClient.init(jsonFile);
-            init();
-        } catch (IOException ioe) {
-            throw new StorageException("Failed to read file configuration!",
-                    ioe);
-        }
-    }
+	/**
+	 * Public init method for File based configuration.
+	 *
+	 * @param jsonFile
+	 *            The File containing JSON configuration
+	 * @throws StorageException
+	 *             if any errors occur
+	 */
+	@Override
+	public void init(File jsonFile) throws StorageException {
+		try {
+			systemConfig = new JsonSimpleConfig(jsonFile);
+			BlobStoreClient.init(jsonFile);
+			init();
+		} catch (IOException ioe) {
+			throw new StorageException("Failed to read file configuration!", ioe);
+		}
+	}
 
-    /**
-     * Public init method for String based configuration.
-     *
-     * @param jsonString The String containing JSON configuration
-     * @throws StorageException if any errors occur
-     */
-    @Override
-    public void init(String jsonString) throws StorageException {
-        try {
-            systemConfig = new JsonSimpleConfig(jsonString);
-            BlobStoreClient.init(jsonString);
-            init();
-        } catch (IOException ioe) {
-            throw new StorageException("Failed to read string configuration!",
-                    ioe);
-        }
-    }
+	/**
+	 * Public init method for String based configuration.
+	 *
+	 * @param jsonString
+	 *            The String containing JSON configuration
+	 * @throws StorageException
+	 *             if any errors occur
+	 */
+	@Override
+	public void init(String jsonString) throws StorageException {
+		try {
+			systemConfig = new JsonSimpleConfig(jsonString);
+			BlobStoreClient.init(jsonString);
+			init();
+		} catch (IOException ioe) {
+			throw new StorageException("Failed to read string configuration!", ioe);
+		}
+	}
 
-    /**
-     * Initialisation occurs here
-     *
-     * @throws StorageException if any errors occur
-     */
-    private void init() throws StorageException {
-        // A quick connection test
-        BlobStoreClient.getClient();
-    }
+	/**
+	 * Initialisation occurs here
+	 *
+	 * @throws StorageException
+	 *             if any errors occur
+	 */
+	private void init() throws StorageException {
+		// A quick connection test
+		BlobStoreClient.getClient();
+	}
 
-    /**
-     * Initialisation occurs here
-     *
-     * @throws StorageException if any errors occur
-     */
-    @Override
-    public void shutdown() throws StorageException {
-        // Don't need to do anything on shutdown
-    }
+	/**
+	 * Initialisation occurs here
+	 *
+	 * @throws StorageException
+	 *             if any errors occur
+	 */
+	@Override
+	public void shutdown() throws StorageException {
+		// Don't need to do anything on shutdown
+	}
 
-    /**
-     * Retrieve the details for this plugin
-     *
-     * @return PluginDescription a description of this plugin
-     */
-    @Override
-    public PluginDescription getPluginDetails() {
-        return new PluginDescription(this);
-    }
+	/**
+	 * Retrieve the details for this plugin
+	 *
+	 * @return PluginDescription a description of this plugin
+	 */
+	@Override
+	public PluginDescription getPluginDetails() {
+		return new PluginDescription(this);
+	}
 
-    /**
-     * Create a new object in storage. An object identifier may be provided, or
-     * a null value will try to have Fedora auto-generate the new OID.
-     *
-     * @param oid the Object ID to use during creation, null is allowed
-     * @return DigitalObject the instantiated DigitalObject created
-     * @throws StorageException if any errors occur
-     */
-    @Override
-    public synchronized DigitalObject createObject(String oid)
-            throws StorageException {
-        // log.debug("createObject({})", oid);
-        if (oid == null) {
-            throw new StorageException("Error; Null OID recieved");
-        }
+	/**
+	 * Create a new object in storage. An object identifier may be provided, or
+	 * a null value will try to have Fedora auto-generate the new OID.
+	 *
+	 * @param oid
+	 *            the Object ID to use during creation, null is allowed
+	 * @return DigitalObject the instantiated DigitalObject created
+	 * @throws StorageException
+	 *             if any errors occur
+	 */
+	@Override
+	public synchronized DigitalObject createObject(String oid) throws StorageException {
+		// log.debug("createObject({})", oid);
+		if (oid == null) {
+			throw new StorageException("Error; Null OID recieved");
+		}
 
-        // Can we see object?
-        if (BlobStoreClient.getClient()
-                .directoryExists(BlobStoreClient.getContainerName(), oid)) {
-            throw new StorageException(
-                    "Error; object '" + oid + "' already exists in Blobstore");
-        }
+		// Can we see object?
+		if (BlobStoreClient.getClient().directoryExists(BlobStoreClient.getContainerName(), oid)) {
+			throw new StorageException("Error; object '" + oid + "' already exists in Blobstore");
+		}
 
-        BlobStoreClient.getClient()
-                .createDirectory(BlobStoreClient.getContainerName(), oid);
+		BlobStoreClient.getClient().createDirectory(BlobStoreClient.getContainerName(), oid);
 
-        // Instantiate and return
-        return new BlobStoreDigitalObject(oid);
-    }
+		// Instantiate and return
+		return new BlobStoreDigitalObject(oid);
+	}
 
-    /**
-     * Get the indicated object from storage.
-     *
-     * @param oid the Object ID to retrieve
-     * @return DigitalObject the instantiated DigitalObject requested
-     * @throws StorageException if any errors occur
-     */
-    @Override
-    public DigitalObject getObject(String oid) throws StorageException {
+	/**
+	 * Get the indicated object from storage.
+	 *
+	 * @param oid
+	 *            the Object ID to retrieve
+	 * @return DigitalObject the instantiated DigitalObject requested
+	 * @throws StorageException
+	 *             if any errors occur
+	 */
+	@Override
+	public DigitalObject getObject(String oid) throws StorageException {
 
-        if (oid == null) {
-            throw new StorageException("Error; Null OID received");
-        }
-        if (!BlobStoreClient.getClient()
-                .directoryExists(BlobStoreClient.getContainerName(), oid)) {
-            throw new StorageException(
-                    "Error; Object with OID does not exist in storage");
-        }
-        // Instantiate and return
-        return new BlobStoreDigitalObject(oid);
+		if (oid == null) {
+			throw new StorageException("Error; Null OID received");
+		}
+		if (!BlobStoreClient.getClient().directoryExists(BlobStoreClient.getContainerName(), oid)) {
+			throw new StorageException("Error; Object with OID does not exist in storage");
+		}
+		// Instantiate and return
+		return new BlobStoreDigitalObject(oid);
 
-    }
+	}
 
-    /**
-     * Remove the indicated object from storage.
-     *
-     * @param oid the Object ID to remove from storage
-     * @throws StorageException if any errors occur
-     */
-    @Override
-    public synchronized void removeObject(String oid) throws StorageException {
-        // log.debug("removeObject({})", oid);
-        if (oid == null) {
-            throw new StorageException("Error; Null OID recieved");
-        }
+	/**
+	 * Remove the indicated object from storage.
+	 *
+	 * @param oid
+	 *            the Object ID to remove from storage
+	 * @throws StorageException
+	 *             if any errors occur
+	 */
+	@Override
+	public synchronized void removeObject(String oid) throws StorageException {
+		// log.debug("removeObject({})", oid);
+		if (oid == null) {
+			throw new StorageException("Error; Null OID recieved");
+		}
 
-        try {
-            removeBlobStoreObject(oid);
-        } catch (Exception e) {
-            throw new StorageException("Unable to remove object", e);
-        }
-    }
+		try {
+			removeBlobStoreObject(oid);
+		} catch (Exception e) {
+			throw new StorageException("Unable to remove object", e);
+		}
+	}
 
-    /**
-     * Perform the actual removal from Fedora
-     *
-     * @param fedoraPid the Fedora PID to remove from storage
-     * @throws StorageException if any errors occur
-     */
-    private void removeBlobStoreObject(String oid) throws StorageException {
-        BlobStoreClient.getClient()
-                .deleteDirectory(BlobStoreClient.getContainerName(), oid);
-    }
+	/**
+	 * Perform the actual removal from Fedora
+	 *
+	 * @param fedoraPid
+	 *            the Fedora PID to remove from storage
+	 * @throws StorageException
+	 *             if any errors occur
+	 */
+	private void removeBlobStoreObject(String oid) throws StorageException {
+		if (BlobStoreClient.getClient().directoryExists(BlobStoreClient.getContainerName(), oid)) {
+			BlobStoreClient.getClient().deleteDirectory(BlobStoreClient.getContainerName(), oid);
+		} else {
+			throw new StorageException("Object " + oid + " doesn't exist to be deleted");
+		}
+	}
 
-    /**
-     * Return a list of Object IDs currently in storage.
-     *
-     * @return Set<String> A Set containing all the OIDs in storage.
-     */
-    @Override
-    public Set<String> getObjectIdList() {
-        Set<String> objectIdList = new HashSet<String>();
-        PageSet<? extends StorageMetadata> pageSet;
-        try {
-            pageSet = BlobStoreClient.getClient()
-                    .list(BlobStoreClient.getContainerName());
+	/**
+	 * Return a list of Object IDs currently in storage.
+	 *
+	 * @return Set<String> A Set containing all the OIDs in storage.
+	 */
+	@Override
+	public Set<String> getObjectIdList() {
+		Set<String> objectIdList = new HashSet<String>();
+		PageSet<? extends StorageMetadata> pageSet;
+		try {
+			pageSet = BlobStoreClient.getClient().list(BlobStoreClient.getContainerName());
 
-            for (StorageMetadata storageMetadata : pageSet) {
-                if (storageMetadata.getType() == StorageType.FOLDER
-                        || storageMetadata
-                                .getType() == StorageType.RELATIVE_PATH) {
-                    objectIdList.add(storageMetadata.getName());
-                }
-            }
+			for (StorageMetadata storageMetadata : pageSet) {
+				if (storageMetadata.getType() == StorageType.FOLDER
+						|| storageMetadata.getType() == StorageType.RELATIVE_PATH) {
+					objectIdList.add(storageMetadata.getName());
+				}
+			}
 
-        } catch (StorageException e) {
-            log.error("Error getting list of object ids", e);
-        }
+		} catch (StorageException e) {
+			log.error("Error getting list of object ids", e);
+		}
 
-        return objectIdList;
-    }
+		return objectIdList;
+	}
 
 }
